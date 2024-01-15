@@ -16,7 +16,8 @@ install_packages () {
 		exit 1
 	fi
 
-	# Loop through the package list, installing each with an appropriate method.
+	# Loop through the package list, installing each with an appropriate
+	# method.
 	# NOTE: The IFS (Internal Field Separator) is an environment variable.
 	while IFS="," read -r package_name description
 	do
@@ -48,6 +49,20 @@ if [ ! -f "${file}" ]; then
 	echo "File not found: "${file}""
 	exit 1
 fi
+
+# Set traps to clean up the temp file and directory.
+trap 'rm -rf "${temp_file}" "${temp_dir}"' EXIT
+
+# Create a temp file to operate on that contais packages to be installed.
+temp_file=$(mktemp)
+
+# Create a temp directory to be used during the process of installing packages
+# from git (if applicable).
+temp_dir=$(mktemp -d)
+
+# Copy every line from the CSV file that does not start with '#' to the temp
+# file.
+sed '/^#/d' "${file}" | sort -k3,3 > "${temp_file}"
 
 echo "Installing Debian packages."
 
