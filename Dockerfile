@@ -32,7 +32,7 @@ WORKDIR /app
 RUN git clone https://github.com/vladimir-grbic/speech_therapist.git .
 
 # Create a virtual environment and activate it
-RUN python -m venv venv
+RUN python3 -m venv venv
 ENV PATH="/app/venv/bin:$PATH"
 
 # Install Python dependencies within the virtual environment.
