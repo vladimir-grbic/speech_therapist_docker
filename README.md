@@ -52,7 +52,7 @@ specific directory on your host).
 ## Interacting with the Container
 
 Once the container starts, you can interact with it based on the specifications
-of your Dockerfile. Files created or modified in `/workspace` will persist.
+of your Dockerfile. Files created or modified in `/app` will persist.
 
 ## Stopping and Restarting the Container
 
