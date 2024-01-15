@@ -1,10 +1,22 @@
 ## Building the Docker Image
 
-From this repository, run the following command:
+From this repository, execute either of the following commands.
 
-```bash
-docker build -t speech_therapist_image .
-```
+- **Using Docker Buildx (Recommended)**
+
+  Docker `buildx` provides enhanced build performance with additional features.
+  To build with `buildx`, run:
+
+  ```bash
+  docker buildx build -t speech_therapist_image .
+  ```
+- **Using Legacy Docker Build**
+
+  If you prefer using the standard build process, execute:
+
+  ```bash
+  docker build -t speech_therapist_image .
+  ```
 
 Note: `-t` tags your image, and `.` indicates Docker should use the Dockerfile
 in the current directory.
@@ -15,23 +27,27 @@ You can run your container with a Docker volume for persistent file storage.
 This can be either a named volume (managed by Docker) or a bind mount (a
 specific directory on your host).
 
-1. **Using a Named Volume**:
+- **Using a Named Volume**
 
-   ```bash
-   docker run -it -v speech_therapist_volume:/data speech_therapist_image
-   ```
+  Run:
 
-   This command creates a volume named `speech_therapist_volume` and mounts it
-   to `/data` inside the container.
+  ```bash
+  docker run -it -v speech_therapist_volume:/app speech_therapist_image
+  ```
 
-2. **Using a Bind Mount**:
+  This command creates a volume named `speech_therapist_volume` and mounts it
+  to `/app` inside the container.
 
-   ```bash
-   docker run -it -v /path/on/your/host:/data speech_therapist_image
-   ```
+- **Using a Bind Mount**
 
-   Replace `/path/on/your/host` with the path on your host machine. This mounts
-   the host directory to `/data` in the container.
+  Run:
+
+  ```bash
+  docker run -it -v /path/on/your/host:/app speech_therapist_image
+  ```
+
+  Replace `/path/on/your/host` with the path on your host machine. This mounts
+  the host directory to `/app` in the container.
 
 ## Interacting with the Container
 
@@ -42,13 +58,13 @@ of your Dockerfile. Files created or modified in `/workspace` will persist.
 
 - To exit the container, type `exit` if in interactive mode.
 
-- To stop the container:
+- To stop the container, run:
 
   ```bash
   docker stop [container-name or container-id]
   ```
 
-- To restart and access persistent data:
+- To restart and access persistent data, run:
 
   ```bash
   docker start -ai [container-name or container-id]

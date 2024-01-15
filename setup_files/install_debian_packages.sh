@@ -28,7 +28,7 @@ install_packages () {
 			exit 1
 		fi
 
-		echo "Now installing:"${package_name}""
+		echo "Now installing: ${package_name}"
 
 		install_command="apt-get install -y"
 
