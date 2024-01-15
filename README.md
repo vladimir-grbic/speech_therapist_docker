@@ -1,5 +1,3 @@
-# README
-
 ## Building the Docker Image
 
 From this repository, run the following command:
