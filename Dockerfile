@@ -1,5 +1,5 @@
 # Use the latest stable version of Debian.
-FROM debian:stable
+FROM debian:bullseye
 
 # Set bash as the default shell.
 SHELL ["/bin/bash", "-c"]
@@ -25,15 +25,30 @@ RUN rm -rf /temp_setup_files
 # Clean up the package lists to keep the image size down.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Create an .ssh directory with appropriate permissions.
+RUN mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh
+
+# Copy the SSH key to the container.
+COPY speech_therapist_ed25519_key /root/.ssh/speech_therapist_ed25519_key
+
+# Set appropriate permissions on the SSH key.
+RUN chmod 600 /root/.ssh/speech_therapist_ed25519_key
+
+# Add GitHub to the list of known hosts.
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
 # Set the working directory.
-WORKDIR /app
+WORKDIR /root/app
 
-# Clone the application code.
-RUN git clone https://github.com/vladimir-grbic/speech_therapist.git .
+# Start ssh-agent, add the SSH key and clone the repository.
+RUN eval $(ssh-agent -s) && \
+    ssh-add /root/.ssh/speech_therapist_ed25519_key && \
+    git clone git@github.com:voidlabsai/speech_therapist.git .
 
-# Create a virtual environment and activate it
+# Create a virtual environment and activate it.
 RUN python3 -m venv venv
-ENV PATH="/app/venv/bin:$PATH"
+ENV PATH="/root/app/venv/bin:$PATH"
 
 # Install Python dependencies within the virtual environment.
 RUN pip install -r requirements.txt
